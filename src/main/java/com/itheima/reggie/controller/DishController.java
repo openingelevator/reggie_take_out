@@ -14,6 +14,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -104,6 +105,19 @@ public class DishController {
     @PutMapping
     public R<String>update(@RequestBody DishDto dishDto){
         dishService.updateWithFlavor(dishDto);
-        return R.success("新增菜品成功");
+        return R.success("菜品修改成功");
+    }
+    @PostMapping("/status/{params.status}")
+    public R<String>statusChange(String ids, Integer status){
+        log.info(ids.toString());
+        String []array=ids.split(",");
+        for(String idstr:array){
+            Dish dish=new Dish();
+            Long id=Long.parseLong(idstr);
+            dish.setId(id);
+            dish.setStatus(status);
+            dishService.updateById(dish);
+        }
+        return R.success("状态修改成功");
     }
 }
