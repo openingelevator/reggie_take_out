@@ -109,11 +109,11 @@ public class DishController {
     }
     @PostMapping("/status/{params.status}")
     public R<String>statusChange(String ids, Integer status){
-        log.info(ids.toString());
+        log.info(ids);
         String []array=ids.split(",");
-        for(String idstr:array){
+        for(String instr:array){
             Dish dish=new Dish();
-            Long id=Long.parseLong(idstr);
+            Long id=Long.parseLong(instr);
             dish.setId(id);
             dish.setStatus(status);
             dishService.updateById(dish);
