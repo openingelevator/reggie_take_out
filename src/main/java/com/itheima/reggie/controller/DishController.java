@@ -14,7 +14,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -119,5 +118,21 @@ public class DishController {
             dishService.updateById(dish);
         }
         return R.success("状态修改成功");
+    }
+
+    /**
+     * 根据条件查询对应的菜品数据
+     * @param dish
+     */
+    @GetMapping("/list")
+    public R<List<Dish>>list(Dish dish){
+        LambdaQueryWrapper<Dish>queryWrapper=new LambdaQueryWrapper<>();
+        //添加查询条件
+        queryWrapper.eq(dish.getCategoryId()!=null,Dish::getCategoryId,dish.getCategoryId());
+        queryWrapper.eq(Dish::getStatus,1);
+        //添加排序条件
+        queryWrapper.orderByAsc(Dish::getSort).orderByDesc(Dish::getUpdateTime);
+        List<Dish>list=dishService.list(queryWrapper);
+        return R.success(list);
     }
 }
